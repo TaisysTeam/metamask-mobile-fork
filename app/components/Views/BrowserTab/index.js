@@ -68,6 +68,7 @@ import { useTheme } from '../../../util/theme';
 import downloadFile from '../../../util/browser/downloadFile';
 import { createBrowserUrlModalNavDetails } from '../BrowserUrlModal/BrowserUrlModal';
 import {
+  CONNECTION_TYPE,
   MM_PHISH_DETECT_URL,
   MM_BLOCKLIST_ISSUE_URL,
   PHISHFORT_BLOCKLIST_ISSUE_URL,
@@ -925,8 +926,12 @@ export const BrowserTab = (props) => {
 
   const initializeBackgroundBridge = (urlBridge, isMainFrame) => {
     const newBridge = new BackgroundBridge({
-      webview: webviewRef,
-      url: urlBridge,
+      connection: {
+        isMainFrame,
+        type: CONNECTION_TYPE.BROWSER,
+        url: urlBridge,
+        webview: webviewRef,
+      },
       getRpcMethodMiddleware: ({ hostname, getProviderState }) =>
         getRpcMethodMiddleware({
           hostname,
@@ -946,7 +951,6 @@ export const BrowserTab = (props) => {
           tabId: props.id,
           injectHomePageScripts,
         }),
-      isMainFrame,
     });
     backgroundBridges.current.push(newBridge);
   };
