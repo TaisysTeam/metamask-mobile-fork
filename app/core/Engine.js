@@ -132,21 +132,6 @@ class Engine {
             }
           },
         },
-        getAccounts: (
-          end: (arg0: null, arg1: any[]) => void,
-          payload: { hostname: string | number },
-        ) => {
-          const { approvedHosts } = store.getState();
-          const isEnabled = approvedHosts[payload.hostname];
-          const { KeyringController } = this.context;
-          const isUnlocked = KeyringController.isUnlocked();
-          const selectedAddress =
-            this.context.PreferencesController.state.selectedAddress;
-          end(
-            null,
-            isUnlocked && isEnabled && selectedAddress ? [selectedAddress] : [],
-          );
-        },
       };
       const assetsContractController = new AssetsContractController({
         onPreferencesStateChange: (listener) =>

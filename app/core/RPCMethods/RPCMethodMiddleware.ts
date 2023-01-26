@@ -322,6 +322,7 @@ export const getRpcMethodMiddleware = ({
       },
       eth_accounts: getEthAccounts,
       eth_coinbase: getEthAccounts,
+      parity_defaultAccount: getEthAccounts,
       eth_sendTransaction: async () => {
         checkTabActive();
         return RPCMethods.eth_sendTransaction({
