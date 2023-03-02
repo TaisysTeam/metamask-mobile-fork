@@ -271,6 +271,7 @@ configurations.all {
 }
 
 dependencies {
+  compile fileTree(dir: "libs", include: ["*.jar"])
 	implementation project(':lottie-react-native')
 
 	implementation project(':react-native-gesture-handler')

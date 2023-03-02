@@ -30,6 +30,8 @@ import WalletConnectSessions from '../../Views/WalletConnectSessions';
 import OfflineMode from '../../Views/OfflineMode';
 import QrScanner from '../../Views/QRScanner';
 import ConnectQRHardware from '../../Views/ConnectQRHardware';
+// UPDATED BY IAN
+import ConnectSIMGapHardware from '../../Views/ConnectSIMGapHardware';
 import LockScreen from '../../Views/LockScreen';
 import EnterPasswordSimple from '../../Views/EnterPasswordSimple';
 import ChoosePassword from '../../Views/ChoosePassword';
@@ -595,6 +597,17 @@ const ConnectQRHardwareFlow = () => (
   </Stack.Navigator>
 );
 
+// UPDATED BY IAN
+const ConnectSIMGapHardwareFlow = () => (
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+  >
+    <Stack.Screen name="ConnectSIMGapHardware" component={ConnectSIMGapHardware} />
+  </Stack.Navigator>
+);
+
 const MainNavigator = () => (
   <Stack.Navigator
     screenOptions={{
@@ -627,6 +640,11 @@ const MainNavigator = () => (
       name="ConnectQRHardwareFlow"
       component={ConnectQRHardwareFlow}
     />
+    <Stack.Screen
+      name="ConnectSIMGapHardwareFlow"
+      component={ConnectSIMGapHardwareFlow}
+    />
+
     <Stack.Screen name="SendView" component={SendView} />
     <Stack.Screen name="SendFlowView" component={SendFlowView} />
     <Stack.Screen name="AddBookmarkView" component={AddBookmarkView} />

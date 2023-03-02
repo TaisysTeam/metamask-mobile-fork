@@ -17,6 +17,8 @@ import cl.json.ShareApplication;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import io.metamask.nativeModules.PreventScreenshotPackage;
+// Updated By IAN
+import io.metamask.nativeModules.SIMGapWalletPackage;
 import android.webkit.WebView;
 
 import androidx.multidex.MultiDexApplication;
@@ -42,6 +44,8 @@ public class MainApplication extends MultiDexApplication implements ShareApplica
 			packages.add(new RNGestureHandlerPackage());
 			packages.add(new RCTAnalyticsPackage());
 			packages.add(new PreventScreenshotPackage());
+// Updated By IAN
+			packages.add(new SIMGapWalletPackage());
 			packages.add(new ReactVideoPackage());
 
 			return packages;

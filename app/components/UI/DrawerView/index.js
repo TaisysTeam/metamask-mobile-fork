@@ -860,6 +860,13 @@ class DrawerView extends PureComponent {
     this.hideDrawer();
   };
 
+// UPDATED BY IAN
+  onConnectSIMGapHardware = () => {
+    this.toggleAccountsModal();
+    this.props.navigation.navigate('ConnectSIMGapHardwareFlow');
+    this.hideDrawer();
+  };
+
   hasBlockExplorer = (providerType) => {
     const { frequentRpcList } = this.props;
     if (providerType === RPC) {
@@ -1445,6 +1452,8 @@ class DrawerView extends PureComponent {
             onAccountChange={this.onAccountChange}
             onImportAccount={this.onImportAccount}
             onConnectHardware={this.onConnectHardware}
+// UPDATED BY IAN
+            onConnectSIMGapHardware={this.onConnectSIMGapHardware}
             ticker={ticker}
           />
         </Modal>
