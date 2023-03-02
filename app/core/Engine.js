@@ -264,7 +264,9 @@ class Engine {
         messenger: this.controllerMessenger.getRestricted({
           name: 'ApprovalController',
         }),
-        showApprovalRequest: () => null,
+        showApprovalRequest: () => {
+          console.log('Snaps/ approvalController showApprovalRequest');
+        },
       });
 
       const phishingController = new PhishingController();
@@ -329,16 +331,16 @@ class Engine {
             this.controllerMessenger,
             'SnapController:getSnapState',
           ),
-          // showConfirmation: (origin, confirmationData) =>
-          //   this.approvalController.addAndShowApprovalRequest({
-          //     origin,
-          //     type: MESSAGE_TYPE.SNAP_CONFIRM,
-          //     requestData: confirmationData,
-          //   }),
           updateSnapState: this.controllerMessenger.call.bind(
             this.controllerMessenger,
             'SnapController:updateSnapState',
           ),
+          showConfirmation: (origin, confirmationData) =>
+            this.approvalController.addAndShowApprovalRequest({
+              origin,
+              type: 'snapConfirmation',
+              requestData: confirmationData,
+            }),
         }),
       });
 
@@ -652,6 +654,7 @@ class Engine {
       this.configureControllersOnNetworkChange();
       this.startPolling();
       this.handleVaultBackup();
+      this.snapsListeners();
       Engine.instance = this;
     }
 
@@ -672,6 +675,46 @@ class Engine {
         .catch((error) => {
           Logger.error(error, 'Engine Vault backup failed');
         }),
+    );
+  }
+
+  snapsListeners() {
+    this.controllerMessenger.subscribe(
+      `${this.snapController}:snapAdded`,
+      (snap, svgIcon = null) => {
+        const {
+          manifest: { proposedName },
+        } = snap;
+        console.log('Snaps/ snapAdded', proposedName);
+      },
+    );
+
+    this.controllerMessenger.subscribe(
+      `${this.snapController}:snapInstalled`,
+      (truncatedSnap) => {
+        console.log('Snaps/ snapInstalled', truncatedSnap);
+      },
+    );
+
+    this.controllerMessenger.subscribe(
+      `${this.snapController}:snapUpdated`,
+      (newSnap, oldVersion) => {
+        console.log('Snaps/ snapUpdated', newSnap, oldVersion);
+      },
+    );
+
+    this.controllerMessenger.subscribe(
+      `${this.snapController}:snapTerminated`,
+      (truncatedSnap) => {
+        console.log('Snaps/ snapTerminated', truncatedSnap);
+      },
+    );
+
+    this.controllerMessenger.subscribe(
+      `${this.snapController}:snapRemoved`,
+      (truncatedSnap) => {
+        console.log('Snaps/ snapRemoved', truncatedSnap);
+      },
     );
   }
 

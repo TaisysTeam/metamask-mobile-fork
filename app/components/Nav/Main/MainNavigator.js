@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Image, StyleSheet, Keyboard, Platform } from 'react-native';
+import { Image, StyleSheet, Keyboard, Platform, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -72,6 +72,7 @@ import { isEqual } from 'lodash';
 import { selectProviderConfig } from '../../../selectors/networkController';
 import { strings } from '../../../../locales/i18n';
 import isUrl from 'is-url';
+import { SnapsExecutionWebView } from '../../UI/SnapsExecutionWebView';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -290,6 +291,9 @@ const HomeTabs = () => {
   return (
     <DrawerContext.Provider value={{ drawerRef }}>
       <Drawer ref={drawerRef}>
+        <View>
+          <SnapsExecutionWebView />
+        </View>
         <Tab.Navigator
           initialRouteName={Routes.WALLET.HOME}
           tabBar={({ state, descriptors, navigation }) =>
