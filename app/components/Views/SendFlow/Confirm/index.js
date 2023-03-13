@@ -244,6 +244,13 @@ class Confirm extends PureComponent {
     multiLayerL1FeeTotal: '0x0',
   };
 
+  setNetworkNonce = async () => {
+    const { setNonce, setProposedNonce, transaction } = this.props;
+    const proposedNonce = await getNetworkNonce(transaction);
+    setNonce(proposedNonce);
+    setProposedNonce(proposedNonce);
+  };
+
   getAnalyticsParams = () => {
     try {
       const { selectedAsset, gasEstimateType, chainId } = this.props;
@@ -345,13 +352,6 @@ class Confirm extends PureComponent {
         multiLayerL1FeeTotal: '0x0',
       });
     }
-  };
-
-  setNetworkNonce = async () => {
-    const { setNonce, setProposedNonce, transaction } = this.props;
-    const proposedNonce = await getNetworkNonce(transaction);
-    setNonce(proposedNonce);
-    setProposedNonce(proposedNonce);
   };
 
   componentDidMount = async () => {
