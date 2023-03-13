@@ -40,7 +40,6 @@ import {
 } from '../../../../core/GasPolling/GasPolling';
 import ShowBlockExplorer from '../../../UI/ApproveTransactionReview/ShowBlockExplorer';
 import createStyles from './styles';
-// import setNetworkNonce from '../../../../util/networks/networkNonce';
 
 const EDIT = 'edit';
 const REVIEW = 'review';
