@@ -135,7 +135,6 @@ const ApproveTransactionHeader = ({
     return FAV_ICON_URL(getHost(newUrl));
   }, [origin, origins, url]);
 
-  console.log('---------------', domainTitle);
   return (
     <View style={styles.transactionHeader}>
       <TagUrl
