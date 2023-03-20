@@ -35,6 +35,7 @@ import {
   decodeApproveData,
   generateTxWithNewTokenAllowance,
   minimumTokenAllowance,
+  generateApproveData,
 } from '../../../util/transactions';
 import TransactionTypes from '../../../core/TransactionTypes';
 import { showAlert } from '../../../actions/alert';
@@ -301,6 +302,8 @@ class ApproveTransactionReview extends PureComponent {
     const { chainId } = this.props;
     const {
       transaction: { origin, to, data, from },
+      transaction,
+      setTransactionObject,
       tokenList,
     } = this.props;
     const { AssetsContractController, TokenBalancesController } =
@@ -369,6 +372,18 @@ class ApproveTransactionReview extends PureComponent {
     const { name: method } = await getMethodData(data);
     const minTokenAllowance = minimumTokenAllowance(tokenDecimals);
 
+    const approvalData = generateApproveData({
+      spender: spenderAddress,
+      value: '0',
+    });
+
+    setTransactionObject({
+      transaction: {
+        ...transaction,
+        data: approvalData,
+      },
+    });
+
     this.setState(
       {
         host,
@@ -400,6 +415,32 @@ class ApproveTransactionReview extends PureComponent {
         this.fetchEstimatedL1Fee,
         POLLING_INTERVAL_ESTIMATED_L1_FEE,
       );
+    }
+  };
+
+  componentDidUpdate = (_, prevState) => {
+    const { transaction, setTransactionObject } = this.props;
+    const {
+      tokenSpendValue,
+      spenderAddress,
+      token: { tokenDecimals },
+    } = this.state;
+
+    if (prevState?.tokenSpendValue !== tokenSpendValue) {
+      const newApprovalTransaction = generateTxWithNewTokenAllowance(
+        tokenSpendValue,
+        tokenDecimals,
+        spenderAddress,
+        transaction,
+      );
+
+      setTransactionObject({
+        ...newApprovalTransaction,
+        transaction: {
+          ...newApprovalTransaction.transaction,
+          data: newApprovalTransaction.data,
+        },
+      });
     }
   };
 
@@ -892,17 +933,12 @@ class ApproveTransactionReview extends PureComponent {
       host,
       method,
       viewData,
-      originalApproveAmount,
-      spendLimitUnlimitedSelected,
-      spendLimitCustomValue,
+      tokenSpendValue,
       token: { tokenStandard, tokenSymbol, tokenValue, tokenName },
     } = this.state;
     const {
       transaction: { to, data },
     } = this.props;
-    const allowance =
-      (!spendLimitUnlimitedSelected && spendLimitCustomValue) ||
-      originalApproveAmount;
     return (
       <TransactionReviewDetailsCard
         toggleViewDetails={this.toggleViewDetails}
@@ -912,7 +948,7 @@ class ApproveTransactionReview extends PureComponent {
         nicknameExists={nicknameExists}
         address={to}
         host={host}
-        allowance={allowance}
+        tokenSpendValue={tokenSpendValue}
         tokenSymbol={tokenSymbol}
         data={data}
         tokenValue={tokenValue}
