@@ -37,6 +37,10 @@ import {
   minimumTokenAllowance,
   generateApproveData,
 } from '../../../util/transactions';
+import Avatar, {
+  AvatarSize,
+  AvatarVariants,
+} from '../../../component-library/components/Avatars/Avatar';
 import TransactionTypes from '../../../core/TransactionTypes';
 import { showAlert } from '../../../actions/alert';
 import { trackEvent, trackLegacyEvent } from '../../../util/analyticsV2';
@@ -384,6 +388,10 @@ class ApproveTransactionReview extends PureComponent {
       },
     });
 
+    const token = Object.values(tokenList).filter(
+      (token) => token.address === to,
+    );
+
     this.setState(
       {
         host,
@@ -396,6 +404,7 @@ class ApproveTransactionReview extends PureComponent {
           tokenValue: encodedValue,
           tokenStandard,
           tokenBalance,
+          tokenImage: token[0]?.iconUrl,
         },
         spenderAddress,
         encodedAmount,
@@ -701,6 +710,7 @@ class ApproveTransactionReview extends PureComponent {
         tokenName,
         tokenValue,
         tokenBalance,
+        tokenImage,
       },
       tokenSpendValue,
       fetchingUpdateDone,
@@ -784,14 +794,30 @@ class ApproveTransactionReview extends PureComponent {
                         : 'set_spend_cap'
                     }`,
                   )}
-                  {'\n'}
+                </Text>
+                <View>
                   {!fetchingUpdateDone && (
-                    <Text variant={TextVariant.HeadingMD}>
+                    <Text
+                      variant={TextVariant.HeadingMD}
+                      style={styles.alignText}
+                    >
                       {strings('spend_limit_edition.token')}
                     </Text>
                   )}
                   {tokenStandard === ERC20 && (
-                    <Text variant={TextVariant.HeadingMD}>{tokenSymbol}</Text>
+                    <View style={styles.tokenContainer}>
+                      <Avatar
+                        variant={AvatarVariants.Token}
+                        size={AvatarSize.Md}
+                        imageSource={{ uri: tokenImage }}
+                      />
+                      <Text
+                        variant={TextVariant.HeadingMD}
+                        style={styles.symbol}
+                      >
+                        {tokenSymbol}
+                      </Text>
+                    </View>
                   )}
                   {(tokenStandard === ERC721 || tokenStandard === ERC1155) && (
                     <ButtonLink
@@ -809,7 +835,7 @@ class ApproveTransactionReview extends PureComponent {
                       }
                     />
                   )}
-                </Text>
+                </View>
                 {(tokenStandard === ERC721 || tokenStandard === ERC1155) && (
                   <Text reset style={styles.explanation}>
                     {`${strings(
@@ -838,6 +864,7 @@ class ApproveTransactionReview extends PureComponent {
                         <CustomSpendCap
                           ticker={tokenSymbol}
                           dappProposedValue={originalApproveAmount}
+                          tokenSpendValue={tokenSpendValue}
                           accountBalance={tokenBalance}
                           domain={host}
                           disableEdit={spendCapCreated}
