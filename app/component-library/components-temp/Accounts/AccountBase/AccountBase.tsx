@@ -39,7 +39,7 @@ const AccountBase = ({
       <Text variant={TextVariant.BodySM} style={styles.label}>
         {accountBalanceLabel}
       </Text>
-      {fetchingTokenBalance ? (
+      {!fetchingTokenBalance ? (
         <Text variant={TextVariant.BodyMDBold}>
           {accountBalance} {accountNativeCurrency}
         </Text>
