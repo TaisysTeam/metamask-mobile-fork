@@ -39,12 +39,12 @@ const AccountBase = ({
       <Text variant={TextVariant.BodySM} style={styles.label}>
         {accountBalanceLabel}
       </Text>
-      {!fetchingTokenBalance ? (
+      {fetchingTokenBalance ? (
+        <SkeletonText thin />
+      ) : (
         <Text variant={TextVariant.BodyMDBold}>
           {accountBalance} {accountNativeCurrency}
         </Text>
-      ) : (
-        <SkeletonText thin />
       )}
     </View>
   </View>

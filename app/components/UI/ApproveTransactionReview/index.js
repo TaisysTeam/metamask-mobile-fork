@@ -641,6 +641,11 @@ class ApproveTransactionReview extends PureComponent {
       gasEstimateType === GAS_ESTIMATE_TYPES.FEE_MARKET ||
       gasEstimateType === GAS_ESTIMATE_TYPES.NONE;
 
+    const shouldDisableConfirmButton =
+      (!fetchingUpdateDone && !tokenSpendValue) ||
+      Boolean(gasError) ||
+      transactionConfirmed;
+
     return (
       <>
         <View style={styles.section} testID={'approve-modal-test-id'}>
@@ -655,11 +660,7 @@ class ApproveTransactionReview extends PureComponent {
               }
               onCancelPress={this.onCancelPress}
               onConfirmPress={this.onConfirmPress}
-              confirmDisabled={
-                (!fetchingUpdateDone && !tokenSpendValue) ||
-                Boolean(gasError) ||
-                transactionConfirmed
-              }
+              confirmDisabled={shouldDisableConfirmButton}
             >
               <View>
                 <ApproveTransactionHeader
