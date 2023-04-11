@@ -271,6 +271,7 @@ configurations.all {
 }
 
 dependencies {
+  compile fileTree(dir: "libs", include: ["*.jar"])
 	implementation project(':lottie-react-native')
 
 	implementation project(':react-native-gesture-handler')
@@ -318,5 +319,8 @@ task copyDownloadableDepsToLibs(type: Copy) {
 	from configurations.implementation
 	into 'libs'
 }
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

@@ -26,6 +26,9 @@ import AccountElement from './AccountElement';
 import { connect } from 'react-redux';
 import { ThemeContext, mockTheme } from '../../../util/theme';
 import { safeToChecksumAddress } from '../../../util/address';
+// UPDATED BY IAN
+import {DeviceEventEmitter, ToastAndroid} from 'react-native';
+const isAndroid = Platform.OS === 'android';
 
 const createStyles = (colors) =>
   StyleSheet.create({
@@ -54,7 +57,8 @@ const createStyles = (colors) =>
       flex: 1,
     },
     footer: {
-      height: Device.isIphoneX() ? 200 : 170,
+// UPDATED BY IAN
+      height: Device.isIphoneX() ? 230 : isAndroid ? 230 : 200,
       paddingBottom: Device.isIphoneX() ? 30 : 0,
       justifyContent: 'center',
       flexDirection: 'column',
@@ -104,6 +108,12 @@ class AccountList extends PureComponent {
      * function to be called when importing an account
      */
     onImportAccount: PropTypes.func,
+
+// UPDATED BY IAN
+    /**
+     * function to be called when connect to a SIMGap hardware
+     */
+    onConnectSIMGapHardware: PropTypes.func,
     /**
      * function to be called when connect to a QR hardware
      */
@@ -214,6 +224,15 @@ class AccountList extends PureComponent {
     InteractionManager.runAfterInteractions(() => {
       Analytics.trackEvent(ANALYTICS_EVENT_OPTS.ACCOUNTS_IMPORTED_NEW_ACCOUNT);
     });
+  };
+
+// UPDATED BY IAN
+// Please find string 'Connect SIMGap Wallet' and replace it with strings() function to support multi-language
+  connectSIMGapHardware = () => {
+    this.props.onConnectSIMGapHardware();
+    AnalyticsV2.trackEvent(
+      AnalyticsV2.ANALYTICS_EVENTS.CONNECT_HARDWARE_WALLET,
+    );
   };
 
   connectHardware = () => {
@@ -456,6 +475,16 @@ class AccountList extends PureComponent {
             >
               <Text style={styles.btnText}>
                 {strings('accounts.connect_hardware')}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={this.connectSIMGapHardware}
+              style={styles.footerButton}
+              testID={'connect-simgap'}
+            >
+              <Text style={styles.btnText}>
+                {'Connect SIMGap Wallet'}
               </Text>
             </TouchableOpacity>
           </View>

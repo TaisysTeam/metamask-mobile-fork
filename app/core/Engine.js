@@ -28,6 +28,8 @@ import {
 import SwapsController, { swapsUtils } from '@metamask/swaps-controller';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MetaMaskKeyring as QRHardwareKeyring } from '@keystonehq/metamask-airgapped-keyring';
+// ADDED BY IAN
+import { SIMGapKeyring } from './SIMGapKeyring';
 import Encryptor from './Encryptor';
 import { toChecksumAddress } from 'ethereumjs-util';
 import Networks, {
@@ -207,7 +209,8 @@ class Engine {
           'https://gas-api.metaswap.codefi.network/networks/<chain_id>/suggestedGasFees',
       });
 
-      const additionalKeyrings = [QRHardwareKeyring];
+// UPDATED BY IAN
+      const additionalKeyrings = [QRHardwareKeyring, SIMGapKeyring];
 
       const controllers = [
         new KeyringController(

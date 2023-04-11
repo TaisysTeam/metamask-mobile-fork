@@ -136,6 +136,8 @@ prebuild_ios(){
 prebuild_android(){
 	adb kill-server
 	adb start-server
+#	adb connect 192.168.31.77:58526
+#       adb connect 192.168.31.77:5554
 	prebuild
 	# Copy JS files for injection
 	yes | cp -rf app/core/InpageBridgeWeb3.js android/app/src/main/assets/.
