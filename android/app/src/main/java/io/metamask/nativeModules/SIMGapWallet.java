@@ -205,6 +205,12 @@ public class SIMGapWallet extends ReactContextBaseJavaModule // implements Activ
 
 	@ReactMethod
 	public void fetchResult(int funcID, Promise promise) {
+		log("----fetchResult---- Function ID: " + funcID);
+		log("----fetchResult---- Results.length: " + _results.length);
+		for (int i = 0; i < _results.length; i++) {
+			log("Result: " + _results[i]);
+		}
+
 		if (funcID<0 || funcID>=_results.length || _results[funcID]==null) {
 			err("Error: Cannot fetch result.");
 			promise.resolve("null"); 
