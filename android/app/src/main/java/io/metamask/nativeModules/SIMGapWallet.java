@@ -32,6 +32,9 @@ import com.taisys.simgap.Wallet.SimResponse;
 import com.taisys.simgap.Wallet.ErrCodeResponse;
 import com.taisys.simgap.SimResp;
 
+import java.security.Security;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import com.taisys.simgap.utils.QCrypto;
 
 public class SIMGapWallet extends ReactContextBaseJavaModule // implements ActivityCompat.OnRequestPermissionsResultCallback
 {
@@ -160,6 +163,13 @@ public class SIMGapWallet extends ReactContextBaseJavaModule // implements Activ
 //			}
 //		}
 //   }
+
+	static {
+		Security.removeProvider("BC");
+		// Confirm that positioning this provider at the end works for your needs!
+		Security.addProvider(new BouncyCastleProvider());
+		Log.i("------------ Keccak-256(00) -------------->", Util.a2hex(QCrypto.keccak(QCrypto.KECCAK_256, new byte[1])));
+	}
 
 	@Override
 	public String getName() {
