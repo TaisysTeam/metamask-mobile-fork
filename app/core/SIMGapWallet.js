@@ -73,15 +73,15 @@ export default {
     return null;
   },
 
-  newWallet() {
+  async newWallet() {
     Logger.log('Calling SIMGapWallet.newWallet()...');
-    var rr = coldWallet.newWallet();
+    var rr = await coldWallet.newWallet();
     if (rr == 'null') return null;
     return rr;
   },
 
   // transType= 0 Transaction; others: typedTransaction
-  signTransaction(address, transType, messageToSign, chainId) {
+  async signTransaction(address, transType, messageToSign, chainId) {
     Logger.log(
       'Calling SIMGapWallet.signTransaction(address = ' +
         address +
@@ -93,7 +93,7 @@ export default {
         chainId +
         ')...',
     );
-    let signature = coldWallet.signTransaction(
+    let signature = await coldWallet.signTransaction(
       address,
       transType,
       messageToSign,
@@ -102,7 +102,7 @@ export default {
     if (signature == 'null') return null;
   },
 
-  signMessage(withAccount, data) {
+  async signMessage(withAccount, data) {
     Logger.log(
       'Calling SIMGapWallet.signMessage(withAccount = ' +
         withAccount +
@@ -110,7 +110,7 @@ export default {
         data +
         ')...',
     );
-    let signature = coldWallet.signMessage(withAccount, data);
+    let signature = await coldWallet.signMessage(withAccount, data);
     if (signature == 'null') return null;
     const r = signature.slice(0, 32);
     const s = signature.slice(32, 64);
@@ -122,7 +122,7 @@ export default {
     };
   },
 
-  signPersonalMessage(withAccount, messageHex) {
+  async signPersonalMessage(withAccount, messageHex) {
     Logger.log(
       'Calling SIMGapWallet.signPersonalMessage(withAccount = ' +
         withAccount +
@@ -130,7 +130,10 @@ export default {
         messageHex +
         ')...',
     );
-    let signature = coldWallet.signPersonalMessage(withAccount, messageHex);
+    let signature = await coldWallet.signPersonalMessage(
+      withAccount,
+      messageHex,
+    );
     if (signature == 'null') return null;
     const r = signature.slice(0, 32);
     const s = signature.slice(32, 64);
@@ -142,7 +145,7 @@ export default {
     };
   },
 
-  signTypedData(withAccount, typedData) {
+  async signTypedData(withAccount, typedData) {
     Logger.log(
       'Calling SIMGapWallet.signTypedData(withAccount = ' +
         withAccount +
@@ -150,7 +153,7 @@ export default {
         typedData +
         ')...',
     );
-    let rr = coldWallet.signTypedData(withAccount, typedData);
+    let rr = await coldWallet.signTypedData(withAccount, typedData);
     if (rr == 'null') {
       Logger.log('SIMGapWallet.signTypedData() got a null response.');
       return null;
@@ -158,7 +161,7 @@ export default {
     return rr;
   },
 
-  decryptMessage(withAccount, encryptedData) {
+  async decryptMessage(withAccount, encryptedData) {
     Logger.log(
       'Calling SIMGapWallet.decryptMessage(withAccount = ' +
         withAccount +
@@ -166,15 +169,15 @@ export default {
         encryptedData +
         ')...',
     );
-    return coldWallet.signTypedData(withAccount, encryptedData);
+    return await coldWallet.signTypedData(withAccount, encryptedData);
   },
 
-  getEncryptionPublicKey(withAccount) {
+  async getEncryptionPublicKey(withAccount) {
     Logger.log(
       'Calling SIMGapWallet.getEncryptionPublicKey(withAccount = ' +
         withAccount +
         ')...',
     );
-    return coldWallet.getEncryptionPublicKey(withAccount);
+    return await coldWallet.getEncryptionPublicKey(withAccount);
   },
 };
