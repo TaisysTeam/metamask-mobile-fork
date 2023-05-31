@@ -64,11 +64,13 @@ class SIMGapKeyring {
 
   // exportAccount should return a hex-encoded private key:
   exportAccount(address, opts = {}) {
+    Logger.log('SIMGapKeyring.js: exportAccount()');
     throw new Error(`Private key export is not supported.`);
   }
 
   // removeAccount
   removeAccount(address) {
+    Logger.log('SIMGapKeyring.js: removeAccount()');
     if (
       !this.accounts.map((a) => a.toLowerCase()).includes(address.toLowerCase())
     ) {
@@ -82,6 +84,7 @@ class SIMGapKeyring {
 
   // addAccounts
   async addAccounts(n = 1) {
+    Logger.log('SIMGapKeyring.js: addAccounts()');
     const from = this.unlockedAccount;
     const to = from + n;
     const newAccounts = [];
@@ -102,12 +105,14 @@ class SIMGapKeyring {
 
   // getAccounts
   getAccounts() {
+    Logger.log('SIMGapKeyring.js: getAccounts()');
     return Promise.resolve(this.accounts);
   }
 
   // signTransaction
   // tx is an instance of the ethereumjs-transaction class.
   async signTransaction(address, tx) {
+    Logger.log('SIMGapKeyring.js: signTransaction()');
     const { r, s, v } = await SIMGapWallet.signTransaction(
       address,
       tx.type,
@@ -127,12 +132,14 @@ class SIMGapKeyring {
 
   // signMessage
   async signMessage(withAccount, data) {
+    Logger.log('SIMGapKeyring.js: signMessage()');
     const { r, s, v } = await SIMGapWallet.signMessage(withAccount, data);
     return '0x' + Buffer.concat([r, s, v]).toString('hex');
   }
 
   // signPersonalMessage
   async signPersonalMessage(withAccount, messageHex) {
+    Logger.log('SIMGapKeyring.js: signPersonalMessage()');
     const { r, s, v } = await SIMGapWallet.signPersonalMessage(
       withAccount,
       messageHex,
@@ -142,6 +149,7 @@ class SIMGapKeyring {
 
   // signTypedData
   async signTypedData(withAccount, typedData) {
+    Logger.log('SIMGapKeyring.js: signTypedData()');
     const { r, s, v } = await SIMGapWallet.signTypedData(
       withAccount,
       Buffer.from(JSON.stringify(typedData), 'utf-8'),
@@ -152,6 +160,7 @@ class SIMGapKeyring {
   // decryptMessage
   // For eth_decryptMessage:
   async decryptMessage(withAccount, encryptedData) {
+    Logger.log('SIMGapKeyring.js: decryptMessage()');
     const dec = await SIMGapWallet.signTypedData(withAccount, encryptedData);
     return dec;
   }
@@ -159,12 +168,14 @@ class SIMGapKeyring {
   // getEncryptionPublicKey
   // get public key for nacl
   async getEncryptionPublicKey(withAccount) {
+    Logger.log('SIMGapKeyring.js: getEncryptionPublicKey()');
     return await SIMGapWallet.getEncryptionPublicKey(withAccount);
   }
 
   // getAppKeyAddress
 
   serialize() {
+    Logger.log('SIMGapKeyring.js: serialize()');
     return Promise.resolve({
       //common
       initialized: this.initialized,
@@ -179,6 +190,7 @@ class SIMGapKeyring {
   }
 
   deserialize(opts) {
+    Logger.log('SIMGapKeyring.js: deserialize()');
     if (opts) {
       //common props;
       this.page = opts.page;
@@ -192,15 +204,18 @@ class SIMGapKeyring {
   }
 
   getFirstPage() {
+    Logger.log('SIMGapKeyring.js: getFirstPage()');
     this.page = 0;
     return this.__getPage(1);
   }
 
   getNextPage() {
+    Logger.log('SIMGapKeyring.js: getNextPage()');
     return this.__getPage(1);
   }
 
   getPreviousPage() {
+    Logger.log('SIMGapKeyring.js: getPreviousPage()');
     return this.__getPage(-1);
   }
 
