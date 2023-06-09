@@ -177,11 +177,10 @@ public class SIMGapWallet extends ReactContextBaseJavaModule // implements Activ
 	}
 
 	public void log(String event, String msg) {
-		if (event=="EVENT_SIMGAP_ERROR") Log.e("SIMGapWallet >>>" + event + ">>>", msg);
-		else Log.e("SIMGapWallet >>>" + event + ">>>", msg);
+		if (event=="EVENT_SIMGAP_ERROR") Log.println(Log.ERROR, "SIMGapWallet.java", ">>>" + event + ">>> " + msg);
+		else Log.println(Log.INFO, "SIMGapWallet.java", ">>>" + event + ">>> " + msg);
 		if (reactContext == null) {
-			Log.e("SIMGapWallet Java", "ReactContext is null");
-			return;
+			Log.println(Log.ERROR, "SIMGapWallet.Java", "ReactContext is null");
 		}
 		reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
 		.emit(event, msg);
