@@ -337,7 +337,8 @@ if (USE_FAKE_DATA_WHEN_ERROR)
 
 	@ReactMethod
 	public void signTransaction(String address, int transType, String data, int chainId, Promise promise) {
-		int fid = FID_AVAILABLE;
+		int fid = FID_SIGN_TRANSACTION;
+		_results[fid] = null;
 		if (!asyncWalletFunction(fid, new IJobs()
 		{
 			@Override
@@ -359,7 +360,20 @@ if (USE_FAKE_DATA_WHEN_ERROR)
 				_results[fid] = (sig==null)?(ERR_TAG + "Cannot get signature"):(RES_TAG + sig);
 			}
 		}))  promise.resolve("null");
-		else promise.resolve("" + fid);
+		else {
+			while(_results[fid] == null) {Util.delay(50);}
+			String s = _results[fid];
+			_results[fid] = null;
+			log("Transaction Signature = " + s);
+			if (s.startsWith(RES_TAG)) s = s.substring(RES_TAG.length());
+			else {
+				err("Error when signTransaction>>" + s);
+				s = "null";
+			}
+
+			promise.resolve(s);
+			//promise.resolve("" + fid);
+		}
 	}
 
 	@ReactMethod

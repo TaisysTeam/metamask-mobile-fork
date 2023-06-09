@@ -113,21 +113,23 @@ class SIMGapKeyring {
   // tx is an instance of the ethereumjs-transaction class.
   async signTransaction(address, tx) {
     Logger.log('SIMGapKeyring.js: signTransaction()');
-    const { r, s, v } = await SIMGapWallet.signTransaction(
+    const msgHash = tx.hash(false);
+
+    const sig = await SIMGapWallet.signTransaction(
       address,
       tx.type,
-      tx.getMessageToSign(false),
+      msgHash,
       tx.common.chainId(),
     );
-    const txJson = tx.toJSON();
-    txJson.v = v;
-    txJson.s = s;
-    txJson.r = r;
-    txJson.type = tx.type;
-    const transaction = TransactionFactory.fromTxData(txJson, {
-      common: tx.common,
-    });
-    return transaction;
+    if (sig.v != undefined) {
+      const chainId = tx.common.chainId();
+      if (chainId > 0) {
+        sig.v += chainId * 2 + 8;
+      }
+    }
+    const signedTx = Object.assign(this, sig);
+    // Newer versions of Ethereumjs-tx are immutable and return a new tx object
+    return Promise.resolve(signedTx === undefined ? tx : signedTx);
   }
 
   // signMessage

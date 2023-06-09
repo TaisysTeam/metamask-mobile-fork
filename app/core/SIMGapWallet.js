@@ -100,6 +100,14 @@ export default {
       chainId,
     );
     if (signature == 'null') return null;
+    const r = signature.slice(0, 32);
+    const s = signature.slice(32, 64);
+    const v = signature.slice(64);
+    return {
+      r,
+      s,
+      v,
+    };
   },
 
   async signMessage(withAccount, data) {
